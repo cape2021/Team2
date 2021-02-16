@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Chart</title>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		<style media="screen">
+		*{font-family: sans-serif;}
+		h1{margin: 15px;}
+			.line{width: 400px; height: 550px; float: left; margin: 15px;}
+		</style>
+	</head>
+	<body>
+		<h1>Plant 2</h1>
+		<div class="line">
+			<canvas id="temp" ></canvas>
+		</div>
+		<div class="line">
+			<canvas id="hum"></canvas>
+		</div>
+		<div class="line">
+				<canvas id="soil"></canvas>
+		</div>
+		<div class="line">
+			<canvas id="lux" ></canvas>
+		</div>
+
+	</body>
+</html>
+
+
+<script type="text/javascript">
+
+
+
+
+	var ctx = document.getElementById('temp').getContext('2d');
+	var chart = new Chart(ctx, {
+		// The type of chart we want to create
+		type: 'line',
+
+		// The data for our dataset
+		data: {
+				labels: [],
+				datasets: [{
+						label: 'Temperature',
+						backgroundColor: '#33b1ff',
+						borderColor: '#33b1ff',
+						data: []
+				}]
+		},
+
+		// Configuration options go here
+		options: {}
+	});
+
+	var ctx2 = document.getElementById('hum').getContext('2d');
+	var chart2 = new Chart(ctx2, {
+		// The type of chart we want to create
+		type: 'line',
+
+		// The data for our dataset
+		data: {
+				labels: [],
+				datasets: [{
+						label: 'Hummidity',
+						backgroundColor: '#4589ff',
+						borderColor: '#4589ff',
+						data: []
+				}]
+		},
+
+		// Configuration options go here
+		options: {}
+	});
+
+	var ctx3 = document.getElementById('soil').getContext('2d');
+	var chart3 = new Chart(ctx3, {
+		// The type of chart we want to create
+		type: 'line',
+
+		// The data for our dataset
+		data: {
+				labels: [],
+				datasets: [{
+						label: 'Soil',
+						backgroundColor: '#08bdba',
+						borderColor: '#08bdba',
+						data: []
+				}]
+		},
+
+		// Configuration options go here
+		options: {}
+	});
+
+	var ctx4 = document.getElementById('lux').getContext('2d');
+	var chart4 = new Chart(ctx4, {
+		// The type of chart we want to create
+		type: 'line',
+
+		// The data for our dataset
+		data: {
+				labels: [],
+				datasets: [{
+						label: 'Lux',
+						backgroundColor: '#d4bbff',
+						borderColor: '#d4bbff',
+						data: []
+				}]
+		},
+
+		// Configuration options go here
+		options: {}
+	});
+
+	var count = 0;
+	var getJSON = function(url, callback) {
+	    var xhr = new XMLHttpRequest();
+	    xhr.open('GET', url, true);
+	    xhr.responseType = 'json';
+	    xhr.onload = function() {
+	      var status = xhr.status;
+	      if (status === 200) {
+	        callback(null, xhr.response);
+	      } else {
+	        callback(status, xhr.response);
+	      }
+	    };
+	    xhr.send();
+	};
+
+	var run = function(){
+	  getJSON('https://plantbase-8314d-default-rtdb.firebaseio.com/PLANT2.json',
+	  function(err, data) {
+	    if (err !== null) {
+	      console.log('Something went wrong: ' + err);
+	    } else {
+	      console.log(data.baFh1fmEmzfq7mIygeerTUXh8Um2);
+	      var tm = data.baFh1fmEmzfq7mIygeerTUXh8Um2.temp;
+				var tt = data.baFh1fmEmzfq7mIygeerTUXh8Um2.int;
+				var hm = data.baFh1fmEmzfq7mIygeerTUXh8Um2.hum;
+				var sl = data.baFh1fmEmzfq7mIygeerTUXh8Um2.soil;
+				var lx = data.baFh1fmEmzfq7mIygeerTUXh8Um2.lux;
+
+				count+= 1
+				chart.data.datasets[0].data.push(tm);
+				chart.data.labels.push(count)
+				chart.update();
+				//console.log(chart.data.labels)
+				chart2.data.datasets[0].data.push(hm);
+				chart2.data.labels.push(count)
+				chart2.update();
+
+				chart3.data.datasets[0].data.push(sl);
+				chart3.data.labels.push(count)
+				chart3.update();
+
+				chart4.data.datasets[0].data.push(lx);
+				chart4.data.labels.push(count)
+				chart4.update();
+
+	    }
+	  });
+	};
+
+	var start = function(){
+	  setInterval(run,1000);
+	};
+
+	start()
+</script>
