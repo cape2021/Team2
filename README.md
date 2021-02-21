@@ -1,5 +1,6 @@
 # Team2
 Cape 2021 Workshop Team 2 Repository
+02/21 10:32 we fixed all the error and begin to train~
 
 # [Haworthia fasciata (十二の巻)](https://en.wikipedia.org/wiki/Haworthiopsis_fasciata)
 
